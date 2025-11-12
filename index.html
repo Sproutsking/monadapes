@@ -167,6 +167,7 @@
             text-align: center;
             margin-bottom: 48px;
             position: relative;
+            z-index: 100;
         }
 
         .section-title span {
@@ -576,11 +577,117 @@
             min-height: 24px;
         }
 
+        /* About Us Section */
+        .about {
+            padding: 100px 0;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-intro {
+            font-size: clamp(16px, 2.5vw, 18px);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 28px 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-purple-light));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 16px 40px rgba(147, 51, 234, 0.25);
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .features {
             padding: 100px 0;
             background: var(--bg-secondary);
             position: relative;
             overflow: hidden;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(147, 51, 234, 0.08) 100px, rgba(147, 51, 234, 0.08) 102px),
+                repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(147, 51, 234, 0.08) 100px, rgba(147, 51, 234, 0.08) 102px);
+            pointer-events: none;
+            opacity: 1;
+        }
+
+        .features::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.6);
+            opacity: 0.7;
         }
 
         .features-grid {
@@ -589,6 +696,8 @@
             gap: 24px;
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
         }
 
         .feature-card {
@@ -602,6 +711,7 @@
             cursor: pointer;
             transform-style: preserve-3d;
             perspective: 1000px;
+            z-index: 10;
         }
 
         .feature-card::before {
@@ -681,9 +791,558 @@
             text-align: center;
         }
 
-        .roadmap {
+        /* Tokenomics Section */
+        .tokenomics {
             padding: 120px 0;
             background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tokenomics-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tokenomics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .tokenomics-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .token-center {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-dark));
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 0 20px rgba(147, 51, 234, 0.1),
+                0 0 0 40px rgba(147, 51, 234, 0.05),
+                0 20px 60px rgba(147, 51, 234, 0.4);
+            animation: tokenFloat 4s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        @keyframes tokenFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        .token-center::before {
+            content: '';
+            position: absolute;
+            inset: -30px;
+            border: 2px solid var(--accent-purple);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: tokenRing 3s ease-out infinite;
+        }
+
+        @keyframes tokenRing {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .token-symbol {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .token-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .orbit-ring {
+            position: absolute;
+            border: 2px solid rgba(147, 51, 234, 0.2);
+            border-radius: 50%;
+            animation: orbitRotate 20s linear infinite;
+        }
+
+        .orbit-ring-1 {
+            width: 340px;
+            height: 340px;
+        }
+
+        .orbit-ring-2 {
+            width: 440px;
+            height: 440px;
+            animation-duration: 25s;
+            animation-direction: reverse;
+        }
+
+        @keyframes orbitRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .token-segment {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-purple);
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-shadow: 0 8px 32px rgba(147, 51, 234, 0.3);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .token-segment:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(147, 51, 234, 0.5);
+            z-index: 20;
+        }
+
+        .token-segment-1 { top: 20px; left: 50%; transform: translateX(-50%); }
+        .token-segment-2 { top: 50%; right: 20px; transform: translateY(-50%); }
+        .token-segment-3 { bottom: 20px; left: 50%; transform: translateX(-50%); }
+        .token-segment-4 { top: 50%; left: 20px; transform: translateY(-50%); }
+
+        .segment-percent {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .segment-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tokenomics-info {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .tokenomics-header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .tokenomics-header h2 {
+            font-size: clamp(36px, 5vw, 52px);
+            font-weight: 900;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tokenomics-header p {
+            font-size: 17px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            border-radius: 12px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .token-details-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .token-details-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-purple), var(--accent-purple-dark));
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .token-details-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .token-details-card:hover {
+            border-color: var(--accent-purple);
+            transform: translateX(8px);
+            box-shadow: 0 12px 32px rgba(147, 51, 234, 0.25);
+        }
+
+        .token-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .token-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .token-detail-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .token-detail-label i {
+            color: var(--accent-purple);
+            font-size: 18px;
+        }
+
+        .token-detail-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .distribution-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .distribution-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .distribution-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-purple-light));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .distribution-item:hover::after {
+            transform: scaleX(1);
+        }
+
+        .distribution-item:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(147, 51, 234, 0.25);
+        }
+
+        .distribution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .distribution-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .distribution-percentage {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .distribution-description {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(147, 51, 234, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.1) 0%, transparent 40%),
+                repeating-linear-gradient(45deg, transparent, transparent 80px, rgba(147, 51, 234, 0.08) 80px, rgba(147, 51, 234, 0.08) 82px),
+                repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(147, 51, 234, 0.08) 80px, rgba(147, 51, 234, 0.08) 82px);
+            pointer-events: none;
+            opacity: 1;
+        }
+
+        .how-it-works::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, var(--accent-purple) 20%, var(--accent-purple) 80%, transparent);
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.6);
+            opacity: 0.6;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .step-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 32px;
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 2000;
+        }
+
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 80px;
+            width: 2px;
+            height: calc(100% - 20px);
+            background: linear-gradient(to bottom, var(--accent-purple), transparent);
+            opacity: 0.3;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 12px 32px rgba(147, 51, 234, 0.4);
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .step-item:hover .step-number {
+            transform: scale(1.1) rotate(360deg);
+            box-shadow: 0 16px 40px rgba(147, 51, 234, 0.6);
+        }
+
+        .step-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            transition: var(--transition);
+        }
+
+        .step-item:hover .step-content {
+            border-color: var(--accent-purple);
+            box-shadow: 0 12px 32px rgba(147, 51, 234, 0.25);
+            transform: translateX(8px);
+        }
+
+        .step-content h3 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Partners Section */
+        .partners {
+            padding: 100px 0;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partners-track-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 40px 0;
+            margin-top: 20px;
+        }
+
+        .partners-track-container::before,
+        .partners-track-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .partners-track-container::before {
+            left: 0;
+            background: linear-gradient(90deg, var(--bg-primary), transparent);
+        }
+
+        .partners-track-container::after {
+            right: 0;
+            background: linear-gradient(270deg, var(--bg-primary), transparent);
+        }
+
+        .partners-track {
+            display: flex;
+            gap: 32px;
+            animation: scroll-partners 30s linear infinite;
+            will-change: transform;
+        }
+
+        .partners-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-partners {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .partner-card {
+            min-width: 280px;
+            height: 180px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .partner-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.15), transparent 70%),
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(147, 51, 234, 0.03) 10px, rgba(147, 51, 234, 0.03) 11px);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .partner-card:hover::before {
+            opacity: 1;
+        }
+
+        .partner-card:hover {
+            transform: translateY(-12px) scale(1.05);
+            border-color: var(--accent-purple);
+            box-shadow: 0 20px 50px rgba(147, 51, 234, 0.4);
+        }
+
+        .partner-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-dark));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            box-shadow: 0 8px 24px rgba(147, 51, 234, 0.3);
+            transition: var(--transition);
+        }
+
+        .partner-card:hover .partner-logo {
+            transform: rotate(360deg) scale(1.1);
+            box-shadow: 0 12px 32px rgba(147, 51, 234, 0.5);
+        }
+
+        .partner-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .partner-tag {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .roadmap {
+            padding: 120px 0;
+            background: var(--bg-secondary);
             position: relative;
             overflow: hidden;
         }
@@ -788,7 +1447,31 @@
 
         .roadmap-card-pc p {
             font-size: 13.5px;
+            text-align: left;
             color: var(--text-secondary);
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .roadmap-card-pc p::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--accent-purple);
+            font-size: 12px;
+            animation: bulletPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes bulletPulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .roadmap-card-pc p span {
+            margin-left: 6px;
+            font-size: 14px;
         }
 
         .roadmap-mobile {
@@ -829,6 +1512,30 @@
             z-index: 3;
         }
 
+        .roadmap-card-mobile p {
+            font-size: 13.5px;
+            text-align: left;
+            color: var(--text-secondary);
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .roadmap-card-mobile p::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--accent-purple);
+            font-size: 12px;
+            animation: bulletPulse 2s ease-in-out infinite;
+        }
+
+        .roadmap-card-mobile p span {
+            margin-left: 6px;
+            font-size: 14px;
+        }
+
         .roadmap-dot-mobile {
             position: absolute;
             top: 50%;
@@ -847,6 +1554,114 @@
             background: var(--accent-green);
             box-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
             animation: greenPulse 1.5s infinite;
+        }
+        .Roadmap-span {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-left: 2px solid var(--accent-purple);
+            padding-left: 12px;
+            display: inline-block;
+        }
+
+        .about-intro {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    box-shadow: 0 8px 32px var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.about-intro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-purple-light));
+}
+
+.about-intro::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+.section-title {
+            font-size: clamp(28px, 4.5vw, 48px);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 48px;
+            position: relative;
+            z-index: 100;
+            padding: 0 16px;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, rgba(16, 2, 29, 0.9), rgba(26, 26, 36, 0.8));
+            padding: 8px 24px;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+            box-shadow: 0 8px 32px var(--shadow);
+            backdrop-filter: blur(8px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-title span::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-purple-light));
+        }
+
+        .section-title span::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: clamp(22px, 5.5vw, 36px);
+                margin-bottom: 36px;
+                padding: 0 12px;
+            }
+            
+            .section-title span {
+                padding: 6px 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: clamp(20px, 6vw, 28px);
+                margin-bottom: 28px;
+                padding: 0 8px;
+            }
+            
+            .section-title span {
+                padding: 5px 14px;
+                font-size: 0.9em;
+            }
         }
 
         .mystery-box {
@@ -993,6 +1808,87 @@
             background: var(--accent-purple);
             color: white;
             border-color: var(--accent-purple);
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 100px 0;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent-purple);
+        }
+
+        .faq-question {
+            padding: 24px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            color: var(--text-primary);
+        }
+
+        .faq-question:hover {
+            background: rgba(147, 51, 234, 0.05);
+        }
+
+        .faq-question h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            padding-right: 20px;
+        }
+
+        .faq-icon {
+            font-size: 20px;
+            color: var(--accent-purple);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 28px 24px;
+        }
+
+        .faq-answer p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
         }
 
         footer {
@@ -1179,6 +2075,61 @@
             }
             .roadmap-pc { display: none; }
             .roadmap-mobile { display: block; }
+            .step-item {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 40px;
+            }
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+            .step-item:not(:last-child)::after {
+                display: none;
+            }
+            .step-content {
+                padding: 24px;
+            }
+            .step-content h3 {
+                font-size: 20px;
+            }
+            .tokenomics-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .tokenomics-visual {
+                height: 400px;
+            }
+            .token-center {
+                width: 180px;
+                height: 180px;
+            }
+            .token-symbol {
+                font-size: 36px;
+            }
+            .token-segment {
+                width: 100px;
+                height: 100px;
+                padding: 12px;
+            }
+            .segment-percent {
+                font-size: 24px;
+            }
+            .segment-label {
+                font-size: 10px;
+            }
+            .orbit-ring-1 {
+                width: 280px;
+                height: 280px;
+            }
+            .orbit-ring-2 {
+                width: 360px;
+                height: 360px;
+            }
         }
     </style>
 </head>
@@ -1202,6 +2153,7 @@
             <nav>
                 <div class="logo">MONAD APES</div>
                 <div class="nav-links">
+                    <a href="#about">About</a>
                     <a href="#features">Features</a>
                     <a href="#roadmap">Roadmap</a>
                     <a href="#mystery">Mystery</a>
@@ -1220,6 +2172,7 @@
         </header>
 
         <div class="mobile-menu" id="mobileMenu">
+            <a href="#about" onclick="toggleMobileMenu()">About</a>
             <a href="#features" onclick="toggleMobileMenu()">Features</a>
             <a href="#roadmap" onclick="toggleMobileMenu()">Roadmap</a>
             <a href="#mystery" onclick="toggleMobileMenu()">Mystery</a>
@@ -1257,6 +2210,35 @@
             </div>
         </section>
 
+        <section id="about" class="about">
+            <div class="container">
+                <h2 class="section-title"><span>About Us</span></h2>
+                <div class="about-content">
+                    <p class="about-intro">
+                        Monad Apes is not just another NFT collection it's a revolution in Web3 community building. Built on the cutting-edge Monad blockchain, we're creating an ecosystem where holders don't just own digital art; they own a stake in a thriving empire. With our innovative governance system, utility token, and revenue-sharing model, we're redefining what it means to be part of a digital community. Join us as we bridge the gap between digital innovation and real-world impact, creating value that extends far beyond the blockchain.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">4,444</div>
+                            <div class="stat-label">Unique NFTs</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">100+</div>
+                            <div class="stat-label">Traits</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">68%</div>
+                            <div class="stat-label">Revenue to Holders</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">∞</div>
+                            <div class="stat-label">Possibilities</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="features" class="features">
             <div class="container">
                 <h2 class="section-title"><span>Ecosystem Features</span></h2>
@@ -1271,6 +2253,26 @@
                             <li><i class="fas fa-arrow-up"></i> NFT Trait Upgrades / Evolution</li>
                             <li><i class="fas fa-vote-yea"></i> Governance Voting Power</li>
                             <li><i class="fas fa-star"></i> Future project whitelisting</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-users"></i></div>
+                        <h3>NFT ACCESSORIES</h3>
+                        <p>Enhance your NFT experience with exclusive accessories.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-lightbulb"></i> Modify your NFT's appearance</li>
+                            <li><i class="fas fa-file-alt"></i> Access exclusive content</li>
+                            <li><i class="fas fa-handshake"></i> Choose selling price that reflects its value</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-users"></i></div>
+                        <h3>NFT Marketplace</h3>
+                        <p>A platform for buying, selling, and trading NFTs on monad.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-lightbulb"></i> Discover new NFTs</li>
+                            <li><i class="fas fa-file-alt"></i> Access new & trending collections</li>
+                            <li><i class="fas fa-handshake"></i> Buy, sell or gift NFTs</li>
                         </ul>
                     </div>
                     <div class="feature-card">
@@ -1318,6 +2320,192 @@
             </div>
         </section>
 
+        <section id="tokenomics" class="tokenomics">
+            <div class="container">
+                <h2 class="section-title"><span>Tokenomics</span></h2>
+                <div class="tokenomics-container">
+                    <div class="tokenomics-grid">
+                        <div class="tokenomics-visual">
+                            <div class="orbit-ring orbit-ring-1"></div>
+                            <div class="orbit-ring orbit-ring-2"></div>
+                            <div class="token-center">
+                                <div class="token-symbol">$MONAD</div>
+                                <div class="token-name">Token</div>
+                            </div>
+                            <div class="token-segment token-segment-1">
+                                <div class="segment-percent">40%</div>
+                                <div class="segment-label">Staking</div>
+                            </div>
+                            <div class="token-segment token-segment-2">
+                                <div class="segment-percent">25%</div>
+                                <div class="segment-label">Liquidity</div>
+                            </div>
+                            <div class="token-segment token-segment-3">
+                                <div class="segment-percent">20%</div>
+                                <div class="segment-label">Treasury</div>
+                            </div>
+                            <div class="token-segment token-segment-4">
+                                <div class="segment-percent">15%</div>
+                                <div class="segment-label">Team</div>
+                            </div>
+                        </div>
+                        <div class="tokenomics-info">
+                            <div class="tokenomics-header">
+                                <h2>Token Distribution</h2>
+                                <p>Strategic allocation designed to maximize value for holders while ensuring long-term sustainability and growth of the Monad Apes ecosystem. we are here to dominate and 4% Annualy until 50% of supply is burned</p>
+                            </div>
+                            <div class="token-details-card">
+                                <div class="token-detail-row">
+                                    <div class="token-detail-label">
+                                        <i class="fas fa-coins"></i>
+                                        Total Supply
+                                    </div>
+                                    <div class="token-detail-value">1,000,000,000</div>
+                                </div>
+                                <div class="token-detail-row">
+                                    <div class="token-detail-label">
+                                        <i class="fas fa-fire"></i>
+                                        Token Burn
+                                    </div>
+                                    <div class="token-detail-value">4% Annualy</div>
+                                </div>
+                                <div class="token-detail-row">
+                                    <div class="token-detail-label">
+                                        <i class="fas fa-lock"></i>
+                                        Team Vesting
+                                    </div>
+                                    <div class="token-detail-value">24 Months</div>
+                                </div>
+                                <div class="token-detail-row">
+                                    <div class="token-detail-label">
+                                        <i class="fas fa-chart-line"></i>
+                                        Staking model
+                                    </div>
+                                    <div class="token-detail-value">Profit sharing model</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="distribution-breakdown">
+                        <div class="distribution-item">
+                            <div class="distribution-header">
+                                <div class="distribution-title">Staking Rewards</div>
+                                <div class="distribution-percentage">40%</div>
+                            </div>
+                            <div class="distribution-description">
+                                Reserved for NFT holders who stake their apes. Distributed proportionally based on rarity and staking duration to incentivize long-term holding.
+                            </div>
+                        </div>
+                        <div class="distribution-item">
+                            <div class="distribution-header">
+                                <div class="distribution-title">Liquidity Pool</div>
+                                <div class="distribution-percentage">25%</div>
+                            </div>
+                            <div class="distribution-description">
+                                Allocated for DEX liquidity to ensure smooth trading and price stability. Locked liquidity provides confidence and security for all token holders.
+                            </div>
+                        </div>
+                        <div class="distribution-item">
+                            <div class="distribution-header">
+                                <div class="distribution-title">Treasury & Ecosystem</div>
+                                <div class="distribution-percentage">20%</div>
+                            </div>
+                            <div class="distribution-description">
+                                Used for partnerships, marketing, events, and ecosystem development. Managed through community governance votes for maximum transparency.
+                            </div>
+                        </div>
+                        <div class="distribution-item">
+                            <div class="distribution-header">
+                                <div class="distribution-title">Team & Development</div>
+                                <div class="distribution-percentage">15%</div>
+                            </div>
+                            <div class="distribution-description">
+                                Vested over 24 months to align team interests with long-term project success. Ensures continued development and innovation in the ecosystem.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2 class="section-title"><span>How The Ecosystem Works</span></h2>
+                <div class="steps-container">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Mint Your Monad Ape</h3>
+                            <p>Purchase your unique Monad Ape NFT during our public mint. Each NFT is your key to the entire ecosystem, granting you access to exclusive features, governance rights, and profit sharing opportunities.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Earn $MONAD Tokens</h3>
+                            <p>Stake your NFTs to earn $MONAD utility tokens passively. The rarer your NFT, the more tokens you earn. These tokens power the entire ecosystem and can be used for upgrades, governance, and exclusive marketplace purchases.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Participate in Governance</h3>
+                            <p>Use your NFTs and $MONAD tokens to vote on project decisions through the Monad Empire governance system. Propose new features, vote on partnerships, and shape the future direction of the project.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Receive Revenue Share</h3>
+                            <p>Automatically receive 60% of all secondary sales royalties distributed proportionally based on your NFT's rarity. The more you hold, the more you earn—creating true passive income from the ecosystem's growth.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Access Exclusive Benefits</h3>
+                            <p>Shop in the Monad Merch Market with your $MONAD tokens, attend holder-only events, get early access to partner projects, and unlock mystery boxes filled with exclusive utilities and surprises.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="partners" class="partners">
+            <div class="container">
+                <h2 class="section-title"><span>Our Partners</span></h2>
+                <div class="partners-track-container">
+                    <div class="partners-track" id="partnersTrack">
+                        <div class="partner-card">
+                            <div class="partner-logo"><i class="fas fa-rocket"></i></div>
+                            <div class="partner-name">Monad Labs</div>
+                            <div class="partner-tag">Blockchain Partner</div>
+                        </div>
+                        <div class="partner-card">
+                            <div class="partner-logo"><i class="fas fa-chart-network"></i></div>
+                            <div class="partner-name">DeFi Alliance</div>
+                            <div class="partner-tag">DeFi Partner</div>
+                        </div>
+                        <div class="partner-card">
+                            <div class="partner-logo"><i class="fas fa-palette"></i></div>
+                            <div class="partner-name">NFT Gallery</div>
+                            <div class="partner-tag">Art Partner</div>
+                        </div>
+                        <div class="partner-card">
+                            <div class="partner-logo"><i class="fas fa-handshake"></i></div>
+                            <div class="partner-name">Web3 Studios</div>
+                            <div class="partner-tag">Development Partner</div>
+                        </div>
+                        <div class="partner-card">
+                            <div class="partner-logo"><i class="fas fa-shield-alt"></i></div>
+                            <div class="partner-name">Crypto Security</div>
+                            <div class="partner-tag">Security Partner</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="roadmap" class="roadmap">
             <div class="container">
                 <h2 class="section-title"><span>Roadmap</span></h2>
@@ -1337,7 +2525,7 @@
                             <div class="roadmap-dot-pc active"></div>
                             <div class="roadmap-card-pc">
                                 <div class="roadmap-phase-pc">Phase 2</div>
-                                <h3>Mystery Box Reveal</h3>
+                                <p>Mystery Box Reveal</p>
                                 <p>Airdrops</p>
                                 <p>$MONAPE launch</p>
                                 <p> Merchandize drop</p>
@@ -1347,16 +2535,17 @@
                             <div class="roadmap-dot-pc"></div>
                             <div class="roadmap-card-pc">
                                  <div class="roadmap-phase-pc">Phase 3</div>
-                                <h3>Governance pool activation</h3>
+                                <p>Governance pool activation</p>
                                 <p>Launch of Monad Empire voting system</p>
                                 <p>Partnership deals</p>
+                                <p>Platform launch</p>
                             </div>
                         </div>
                         <div class="roadmap-item-pc">
                             <div class="roadmap-dot-pc"></div>
                             <div class="roadmap-card-pc">
                                <div class="roadmap-phase-pc">Phase 4</div>
-                                <h3>Expansion</h3>
+                                <p>Expansion</p>
                                 <p>Merch store scaling</p>
                                 <p>Digital merch market scaling</p>
                                 <p>investment diversification</p>
@@ -1391,6 +2580,7 @@
                                 <h3>Governance pool activation</h3>
                                 <p>Launch of Monad Empire voting system</p>
                                 <p>Partnership deals</p>
+                                <p>Platform launch <span class="Roadmap-span">Q1 2026</span></p>
                             </div>
                             <div class="roadmap-dot-mobile"></div>
                         </div>
@@ -1434,18 +2624,27 @@
                         <h3>Silver back ape</h3>
                         <div class="team-role">Founder</div>
                         <p class="team-quote">"just like satoshi in 2008, again The next revolution begins in silence."</p>
-                        <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> Follow</a>
+                        <a href="https://x.com/Silver_back_ape?s=20" class="team-x-btn"><i class="fab fa-x-twitter"></i> Follow</a>
                     </div>
                     <div class="team-card">
                         <div class="team-avatar">
                             <img src="" alt="">
                         </div>
-                        <h3>Alex Chen</h3>
+                        <h3>Sprouts King</h3>
+                        <div class="team-role">Project director</div>
+                        <p class="team-quote">"Orchestrating the launch to perfection"</p>
+                        <a href="https://x.com/Sprouts_king?s=20" class="team-x-btn"><i class="fab fa-x-twitter"></i> Follow</a>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar">
+                            <img src="" alt="">
+                        </div>
+                        <h3>Dev. JOSH</h3>
                         <div class="team-role">Lead Artist</div>
                         <p class="team-quote">Crafting the visual empire of Monad Apes.</p>
                         <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> @alexart</a>
                     </div>
-                    <div class="team-card">
+                    <!-- <div class="team-card">
                         <div class="team-avatar">
                             <img src="" alt="">
                         </div>
@@ -1453,24 +2652,104 @@
                         <div class="team-role">Project Manager</div>
                         <p class="team-quote">Orchestrating the launch to perfection.</p>
                         <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> @priyapm</a>
-                    </div>
+                    </div> -->
                     <div class="team-card">
                         <div class="team-avatar">
                             <img src="" alt="">
                         </div>
-                        <h3>Marcus Lee</h3>
+                        <h3>Douna£mpire</h3>
                         <div class="team-role">Social Media</div>
-                        <p class="team-quote">Building the loudest ape army online.</p>
-                        <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> @marcusape</a>
+                        <p class="team-quote">Building the loudest ape army on monad.</p>
+                        <a href="https://x.com/Douna_empiree?s=20" class="team-x-btn"><i class="fab fa-x-twitter"></i> @marcusape</a>
                     </div>
                     <div class="team-card">
                         <div class="team-avatar">
                             <img src="" alt="">
                         </div>
                         <h3>TimmyONmonad</h3>
-                        <div class="team-role">Social Media</div>
-                        <p class="team-quote">Building the loudest ape army online.</p>
-                        <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> @marcusape</a>
+                        <div class="team-role">Collab manager</div>
+                        <p class="team-quote">Connecting with other projects to build a stronger community.</p>
+                        <a href="https://x.com/TimmyONmonad?s=20" class="team-x-btn"><i class="fab fa-x-twitter"></i> @marcusape</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="faq">
+            <div class="container">
+                <h2 class="section-title"><span>Frequently Asked Questions</span></h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <h3>What is Monad Apes?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Monad Apes is a revolutionary NFT collection built on the Monad blockchain. It's more than just digital art it's a complete ecosystem featuring a utility token ($MONAD), governance system (Monad Empire), merchandise marketplace, and revenue-sharing model that rewards holders for participating in the community.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <h3>How do I mint a Monad Ape NFT?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Connect your Web3 wallet to our minting platform when the public sale goes live. Make sure you have enough cryptocurrency to cover the mint price plus gas fees. Whitelist members will get early access—check your wallet address above to see if you're whitelisted.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <h3>What is the $MONAD token and how do I earn it?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>$MONAD is our utility token that powers the ecosystem. You earn it by staking your NFTs the rarer your NFT, the higher your rewards. Use $MONAD for governance voting, trait upgrades, marketplace purchases, and accessing exclusive features within the Monad Apes ecosystem.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <h3>How does the revenue-sharing model work?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>We take 10% royalties on all secondary market sales. From this, 60% goes directly to NFT holders (distributed by rarity), 20% to the community treasury, and 20% to development and marketing. This means the more the collection trades, the more passive income you earn.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <h3>What is the Mystery Box?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>The Mystery Box is a special reward for dedicated collectors. Mint 10 NFTs to unlock your Mystery Box, which contains exclusive utilities, early access to future drops, special edition merchandise, and other surprises that enhance your Monad Apes experience.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <h3>How do I participate in governance?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Holders can access the Monad Empire governance portal to vote on proposals, suggest new features, and help decide the project's future direction. Your voting power is determined by the number and rarity of your NFTs, plus your $MONAD token holdings.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <h3>What makes Monad Apes different from other NFT projects?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>We combine multiple value streams: passive income through revenue sharing, active earning through staking, real governance power, exclusive merchandise marketplace, and IRL events. Plus, we're built on Monad—a next-gen blockchain offering superior speed and lower costs than traditional platforms.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            <h3>Where can I connect with the community?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Join our vibrant community on Discord for daily discussions, Twitter/X for announcements and alpha, TikTok would follow soon with creative content, and Facebook for broader engagement. Links are available in the footer. Our team is active across all platforms and regularly engages with the community.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1492,6 +2771,7 @@
                   <div class="footer-column">
                     <h4>Project</h4>
                     <ul>
+                        <li><a href="#about">About</a></li>
                         <li><a href="#features">Features</a></li>
                         <li><a href="#roadmap">Roadmap</a></li>
                         <li><a href="#mystery">Mystery</a></li>
@@ -1553,160 +2833,226 @@
     </div>
 
     <script>
-        const matrixRain = document.getElementById('matrixRain');
-        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-        const fontSize = 14;
-        let columns, drops = [];
+    const matrixRain = document.getElementById('matrixRain');
+    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    const fontSize = 14;
+    let columns, drops = [];
 
-        function initMatrix() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.style.position = 'absolute';
-            canvas.style.top = 0;
-            canvas.style.left = 0;
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            matrixRain.innerHTML = '';
-            matrixRain.appendChild(canvas);
+    function initMatrix() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.style.position = 'absolute';
+        canvas.style.top = 0;
+        canvas.style.left = 0;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        matrixRain.innerHTML = '';
+        matrixRain.appendChild(canvas);
 
-            columns = Math.floor(canvas.width / fontSize);
-            drops = Array(columns).fill(1);
+        columns = Math.floor(canvas.width / fontSize);
+        drops = Array(columns).fill(1);
 
-            function draw() {
-                ctx.fillStyle = 'rgba(10, 10, 16, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = 'rgba(147, 51, 234, 0.6)';
-                ctx.font = `${fontSize}px monospace`;
+        function draw() {
+            ctx.fillStyle = 'rgba(10, 10, 16, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(147, 51, 234, 0.6)';
+            ctx.font = `${fontSize}px monospace`;
 
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                    drops[i]++;
-                }
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
             }
-
-            setInterval(draw, 50);
         }
 
+        setInterval(draw, 50);
+    }
+
+    initMatrix();
+    window.addEventListener('resize', () => {
+        matrixRain.innerHTML = '';
         initMatrix();
-        window.addEventListener('resize', () => {
-            matrixRain.innerHTML = '';
-            initMatrix();
-        });
+    });
 
-        const WHITELIST = ["0x1234567890abcdef1234567890abcdef12345678", "0xabcdef1234567890abcdef1234567890abcdef12"];
-        const MINT_DATE = new Date('2025-12-26T12:00:00Z');
+    // Infinite scrolling partners
+    function initPartners() {
+        const track = document.getElementById('partnersTrack');
+        const cards = track.innerHTML;
+        track.innerHTML = cards + cards + cards;
+    }
 
-        function toggleTheme() {
-            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-            const newTheme = isLight ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            document.getElementById('theme-icon').textContent = newTheme === 'light' ? 'Sun' : 'Moon';
-            localStorage.setItem('theme', newTheme);
-        }
+    const WHITELIST = [
+        "0x1234567890abcdef1234567890abcdef12345678",
+        "0xabcdef1234567890abcdef1234567890abcdef12"
+    ];
 
-        function updateCountdown(elementId) {
-            const update = () => {
-                const diff = MINT_DATE - new Date();
-                if (diff <= 0) {
-                    document.getElementById(elementId).innerHTML = '<div style="grid-column: span 4; color: var(--accent-purple); font-weight: 700;">Mint is LIVE!</div>';
-                    return;
-                }
-                const d = Math.floor(diff / 86400000).toString().padStart(2, '0');
-                const h = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
-                const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-                const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-                const values = document.querySelectorAll(`#${elementId} .time-value`);
-                if (values.length === 4) {
-                    values[0].textContent = d;
-                    values[1].textContent = h;
-                    values[2].textContent = m;
-                    values[3].textContent = s;
-                }
-            };
-            update();
-            return setInterval(update, 1000);
-        }
+    // ===== MINT DATE =====
+    // Public date (for quick uncomment when ready):
+    // const MINT_DATE = new Date('2025-12-11T00:00:00Z');
+    // Active real date used by the countdown (keeps hours/mins/secs accurate)
+    const MINT_DATE = new Date('2025-12-11T00:00:00Z');
 
-        let mainInterval, popupInterval;
+    // If you really want the date hidden in code, replace the line above with an encoded version:
+    // const MINT_DATE = new Date(atob('MjAyNS0xMi0xMVQwMDowMDowMFo=')); // base64 of "2025-12-11T00:00:00Z"
 
-        window.onload = () => {
-            const saved = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', saved);
-            document.getElementById('theme-icon').textContent = saved === 'light' ? 'Sun' : 'Moon';
-            mainInterval = updateCountdown('mainCountdown');
-            
-            const openBtn = document.getElementById('openMenuBtn');
-            const closeBtn = document.getElementById('closeMenuBtn');
-            if (openBtn) openBtn.style.display = 'flex';
-            if (closeBtn) closeBtn.style.display = 'none';
-        };
+    function toggleTheme() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const newTheme = isLight ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        document.getElementById('theme-icon').textContent = newTheme === 'light' ? 'Sun' : 'Moon';
+        localStorage.setItem('theme', newTheme);
+    }
 
-        function showMysteryPopup() {
-            const popup = document.getElementById('mysteryPopup');
-            popup.classList.add('active');
-            if (popupInterval) clearInterval(popupInterval);
-            popupInterval = updateCountdown('popupCountdown');
-        }
+    function updateCountdown(elementId) {
+        const update = () => {
+            const now = new Date();
+            const diff = MINT_DATE - now;
 
-        function closePopup() {
-            document.querySelectorAll('.popup-overlay').forEach(p => p.classList.remove('active'));
-            if (popupInterval) clearInterval(popupInterval);
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const openBtn = document.getElementById('openMenuBtn');
-            const closeBtn = document.getElementById('closeMenuBtn');
-            
-            menu.classList.toggle('active');
-            
-            if (menu.classList.contains('active')) {
-                openBtn.style.display = 'none';
-                closeBtn.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            } else {
-                openBtn.style.display = 'flex';
-                closeBtn.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        function checkWhitelist() {
-            const input = document.getElementById('walletInput').value.trim().toLowerCase();
-            const result = document.getElementById('walletResult');
-
-            if (!input || !input.startsWith('0x') || input.length !== 42) {
-                result.textContent = 'Invalid wallet address';
-                result.style.color = '#ef4444';
+            // If time's up or MINT_DATE invalid, show live
+            if (diff <= 0 || isNaN(diff)) {
+                document.getElementById(elementId).innerHTML =
+                    '<div style="grid-column: span 4; color: var(--accent-purple); font-weight: 700;">Mint is LIVE!</div>';
                 return;
             }
 
-            const isWhitelisted = WHITELIST.map(w => w.toLowerCase()).includes(input);
+            // compute real days/h/m/s for internal logic (we'll show 'X' for the day)
+            const totalSeconds = Math.floor(diff / 1000);
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
 
-            const popup = document.getElementById('whitelistPopup');
-            const icon = document.getElementById('popupIcon');
-            const title = document.getElementById('popupTitle');
-            const msg = document.getElementById('popupMessage');
+            // format as two-digits (hours, minutes, seconds)
+            const hh = hours.toString().padStart(2, '0');
+            const mm = minutes.toString().padStart(2, '0');
+            const ss = seconds.toString().padStart(2, '0');
 
-            if (isWhitelisted) {
-                icon.innerHTML = '<i class="fas fa-check-circle" style="color:#10b981; font-size: 48px;"></i>';
-                title.textContent = 'Congratulations!';
-                msg.innerHTML = 'You are <strong>whitelisted</strong>!<br>Get ready to mint on Dec 26.';
+            const values = document.querySelectorAll(`#${elementId} .time-value`);
+            if (values.length === 4) {
+                // Day is intentionally hidden as "X"
+                values[0].textContent = 'X';
+                // show real h / m / s so countdown looks live and accurate
+                values[1].textContent = hh;
+                values[2].textContent = mm;
+                values[3].textContent = ss;
             } else {
-                icon.innerHTML = '<i class="fas fa-times-circle" style="color:#ef4444; font-size: 48px;"></i>';
-                title.textContent = 'Not Whitelisted';
-                msg.innerHTML = 'Join our <a href="#" style="color:var(--accent-purple);text-decoration:underline">Discord</a> to apply.';
+                // optional: if the markup isn't there, fallback to innerHTML update
+                const el = document.getElementById(elementId);
+                if (el) {
+                    el.innerHTML = `
+                        <div class="time">
+                            <span class="time-value">${11}</span>d :
+                            <span class="time-value">${hh}</span>h :
+                            <span class="time-value">${mm}</span>m :
+                            <span class="time-value">${ss}</span>s
+                        </div>
+                    `;
+                }
             }
-            popup.classList.add('active');
+        };
+        update();
+        return setInterval(update, 1000);
+    }
+
+    let mainInterval, popupInterval;
+
+    window.onload = () => {
+        const saved = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        const themeIcon = document.getElementById('theme-icon');
+        if (themeIcon) themeIcon.textContent = saved === 'light' ? 'Sun' : 'Moon';
+
+        mainInterval = updateCountdown('mainCountdown');
+        initPartners();
+
+        const openBtn = document.getElementById('openMenuBtn');
+        const closeBtn = document.getElementById('closeMenuBtn');
+        if (openBtn) openBtn.style.display = 'flex';
+        if (closeBtn) closeBtn.style.display = 'none';
+    };
+
+    function showMysteryPopup() {
+        const popup = document.getElementById('mysteryPopup');
+        popup.classList.add('active');
+        if (popupInterval) clearInterval(popupInterval);
+        popupInterval = updateCountdown('popupCountdown');
+    }
+
+    function closePopup() {
+        document.querySelectorAll('.popup-overlay').forEach(p => p.classList.remove('active'));
+        if (popupInterval) clearInterval(popupInterval);
+    }
+
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const openBtn = document.getElementById('openMenuBtn');
+        const closeBtn = document.getElementById('closeMenuBtn');
+
+        menu.classList.toggle('active');
+
+        if (menu.classList.contains('active')) {
+            if (openBtn) openBtn.style.display = 'none';
+            if (closeBtn) closeBtn.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        } else {
+            if (openBtn) openBtn.style.display = 'flex';
+            if (closeBtn) closeBtn.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    function checkWhitelist() {
+        const inputEl = document.getElementById('walletInput');
+        const result = document.getElementById('walletResult');
+        if (!inputEl || !result) return;
+
+        const input = inputEl.value.trim().toLowerCase();
+
+        if (!input || !input.startsWith('0x') || input.length !== 42) {
+            result.textContent = 'Invalid wallet address';
+            result.style.color = '#ef4444';
+            return;
         }
 
-        document.querySelectorAll('.popup-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) closePopup();
-            });
+        const isWhitelisted = WHITELIST.map(w => w.toLowerCase()).includes(input);
+
+        const popup = document.getElementById('whitelistPopup');
+        const icon = document.getElementById('popupIcon');
+        const title = document.getElementById('popupTitle');
+        const msg = document.getElementById('popupMessage');
+
+        if (isWhitelisted) {
+            if (icon) icon.innerHTML = '<i class="fas fa-check-circle" style="color:#10b981; font-size: 48px;"></i>';
+            if (title) title.textContent = 'Congratulations!';
+            if (msg) msg.innerHTML = 'You are <strong>whitelisted</strong>!<br>Get ready to mint soon.';
+        } else {
+            if (icon) icon.innerHTML = '<i class="fas fa-times-circle" style="color:#ef4444; font-size: 48px;"></i>';
+            if (title) title.textContent = 'Not Whitelisted';
+            if (msg) msg.innerHTML = 'Join our <a href="#" style="color:var(--accent-purple);text-decoration:underline">Discord</a> to apply.';
+        }
+        if (popup) popup.classList.add('active');
+    }
+
+    function toggleFAQ(button) {
+        const faqItem = button.parentElement;
+        const wasActive = faqItem.classList.contains('active');
+
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.classList.remove('active');
         });
-    </script>
+
+        if (!wasActive) {
+            faqItem.classList.add('active');
+        }
+    }
+
+    document.querySelectorAll('.popup-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closePopup();
+        });
+    });
+</script>
+
 </body>
 </html>
