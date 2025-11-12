@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monad Apes - Empire Awaits</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-decoration: none !important;
+            list-style: none !important;
+        }
+
+        :root {
+            --bg-primary: #0a0a10;
+            --bg-secondary: #111118;
+            --bg-card: #1a1a24;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b8;
+            --accent-purple: #9333ea;
+            --accent-purple-light: #a855f7;
+            --accent-purple-dark: #7e22ce;
+            --accent-green: #10b981;
+            --border-color: rgba(147, 51, 234, 0.18);
+            --shadow: rgba(147, 51, 234, 0.15);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a24;
+            --text-secondary: #5a5a70;
+            --accent-purple: #7e22ce;
+            --accent-purple-light: #9333ea;
+            --accent-purple-dark: #6b21a8;
+            --border-color: rgba(126, 34, 206, 0.22);
+            --shadow: rgba(126, 34, 206, 0.12);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .crypto-grid {
+            position: absolute;
+            inset: 0;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(147, 51, 234, 0.04) 40px, rgba(147, 51, 234, 0.04) 41px),
+                repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(147, 51, 234, 0.04) 40px, rgba(147, 51, 234, 0.04) 41px);
+            opacity: 0.5;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.6; }
+        }
+
+        .blockchain-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+            box-shadow: 0 0 12px var(--accent-purple);
+            opacity: 0.6;
+            animation: flowLine 6s linear infinite;
+        }
+
+        .blockchain-line:nth-child(2) { top: 20%; width: 80%; animation-delay: 0s; }
+        .blockchain-line:nth-child(3) { top: 45%; width: 65%; animation-delay: 2s; }
+        .blockchain-line:nth-child(4) { top: 70%; width: 90%; animation-delay: 4s; }
+
+        @keyframes flowLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .node {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--accent-purple), 0 0 40px rgba(147, 51, 234, 0.6);
+            animation: nodePulse 3s ease-in-out infinite;
+        }
+
+        .node::after {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border: 1px solid var(--accent-purple);
+            border-radius: 50%;
+            opacity: 0;
+            animation: ripple 3s ease-out infinite;
+        }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--accent-purple), 0 0 40px rgba(147, 51, 234, 0.6); }
+            50% { transform: scale(1.5); box-shadow: 0 0 30px var(--accent-purple), 0 0 60px rgba(147, 51, 234, 0.8); }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(0.5); opacity: 0.6; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .matrix-rain {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .energy-orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.3), transparent 60%);
+            filter: blur(100px);
+            animation: orbFloat 25s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .energy-orb:nth-child(1) { top: -10%; left: -10%; animation-delay: 0s; }
+        .energy-orb:nth-child(2) { bottom: -15%; right: -10%; animation-delay: 12s; background: radial-gradient(circle, rgba(168, 85, 247, 0.25), transparent 60%); }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, -60px) scale(1.2); }
+        }
+
+        .content-wrap {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 48px;
+            position: relative;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, #6b21a8, var(--bg-primary));
+            padding: 6px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: clamp(24px, 7vw, 36px);
+                margin-bottom: 32px;
+            }
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 16, 0.96);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.6px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-purple);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-purple);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            position: relative;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-dark));
+            border: 1px solid var(--accent-purple);
+            border-radius: 12px;
+            width: 38px;
+            height: 38px;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 8px 24px rgba(147, 51, 234, 0.4);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #openMenuBtn {
+            display: none;
+        }
+
+        #closeMenuBtn {
+            display: none;
+        }
+
+        .mobile-menu-btn::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 2px solid var(--accent-purple);
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .mobile-menu-btn:hover::before {
+            opacity: 0.6;
+        }
+
+        .mobile-menu-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 16px 32px rgba(147, 51, 234, 0.5);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(32px);
+            z-index: 999;
+            padding: 120px 32px 60px;
+            transform: translateX(-100%);
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu a, .mobile-menu button {
+            padding: 20px 24px;
+            background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.2), transparent);
+            border: 1px solid var(--accent-purple-dark);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--text-primary);
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .mobile-menu a::before, .mobile-menu button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .mobile-menu a:hover::before, .mobile-menu button:hover::before {
+            left: 100%;
+        }
+
+        .mobile-menu a:hover, .mobile-menu button:hover {
+            background: rgba(147, 51, 234, 0.25);
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+            transform: translateX(12px);
+            box-shadow: 0 12px 32px rgba(147, 51, 234, 0.3);
+        }
+
+        .hero {
+            margin-top: 88px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(147, 51, 234, 0.12);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 7vw, 72px);
+            font-weight: 900;
+            margin-bottom: 16px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff, var(--accent-purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 2.5vw, 19px);
+            color: var(--text-secondary);
+            max-width: 680px;
+            margin: 0 auto 24px;
+            line-height: 1.7;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: nowrap;
+            margin-bottom: 32px;
+        }
+
+        .cta-button, .cta-secondary {
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: var(--transition);
+            cursor: pointer;
+            white-space: nowrap;
+            width: fit-content;
+            padding: 12px 28px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, black, var(--accent-purple-dark));
+            color: white;
+            border: none;
+            box-shadow: 0 8px 24px rgba(147, 51, 234, 0.3);
+            border: 1px solid var(--accent-purple);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(147, 51, 234, 0.4);
+        }
+
+        .cta-secondary {
+            background: rgba(32, 2, 44, 0.692);
+            color: var(--text-primary);
+            border: 1px solid var(--accent-purple);
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--accent-purple);
+            background: rgba(147, 51, 234, 0.08);
+        }
+
+        .countdown-container {
+            margin: 0 auto 32px;
+            max-width: 560px;
+            background: linear-gradient(135deg, rgba(16, 2, 29, 0.1), rgba(168, 85, 247, 0.05));
+            border: 1px solid var(--accent-purple-dark);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 8px 32px var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+
+        .countdown-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 480px) {
+            .countdown-title {
+                font-size: 12px;
+            }
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .time-block {
+            background: rgba(4, 4, 8, 0.6);
+            border-radius: var(--radius-md);
+            padding: 10px 8px;
+            min-width: 64px;
+            border: 1px solid var(--accent-purple);
+        }
+
+        .time-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--accent-purple);
+            line-height: 1;
+        }
+
+        @media (max-width: 480px) {
+            .time-value {
+                font-size: 18px;
+            }
+        }
+
+        .time-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .wallet-panel {
+            margin: 0 auto 60px;
+            max-width: 560px;
+            background: linear-gradient(135deg, rgba(16, 2, 29, 0.877), rgba(7, 0, 14, 0.849));
+            border: 1px solid var(--accent-purple-dark);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 8px 32px var(--shadow);
+            text-align: center;
+        }
+
+        .wallet-input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .wallet-input {
+            flex: 1;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-purple-dark);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        .wallet-check-btn {
+            width: 140px;
+            padding: 14px 0;
+            background: linear-gradient(135deg, black, var(--accent-purple-dark), black);
+            color: white;
+            border: 1px solid var(--accent-purple);
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 14.5px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 16px rgba(147, 51, 234, 0.3);
+        }
+
+        .wallet-check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(147, 51, 234, 0.4);
+        }
+
+        .wallet-result {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 8px;
+            min-height: 24px;
+        }
+
+        .features {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(147, 51, 234, 0.15), transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.12), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px) rotateX(5deg) rotateY(5deg);
+            border-color: var(--accent-purple);
+            box-shadow: 0 20px 50px rgba(147, 51, 234, 0.3);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-dark));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 8px 24px rgba(147, 51, 234, 0.4);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.15) rotate(360deg);
+            box-shadow: 0 12px 32px rgba(147, 51, 234, 0.5);
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            font-size: 14.5px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .feature-list {
+            list-style: none;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .feature-list i {
+            color: var(--accent-purple);
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .roadmap {
+            padding: 120px 0;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .roadmap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .roadmap-pc {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            padding: 60px 0;
+        }
+
+        .roadmap-pc::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+            z-index: 1;
+        }
+
+        .roadmap-item-pc {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .roadmap-dot-pc {
+            width: 28px;
+            height: 28px;
+            background: #ccc;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            box-shadow: 0 0 20px rgba(200, 200, 200, 0.4);
+            position: relative;
+            z-index: 3;
+        }
+
+        .roadmap-dot-pc.active {
+            background: var(--accent-green);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
+            animation: greenPulse 1.5s infinite;
+        }
+
+        @keyframes greenPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.6); }
+        }
+
+        .roadmap-dot-pc:not(.active) {
+            animation: softPulse 2.5s infinite;
+        }
+
+        @keyframes softPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        .roadmap-card-pc {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            transition: var(--transition);
+            position: relative;
+            z-index: 2;
+        }
+
+        .roadmap-card-pc:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 16px 40px rgba(147, 51, 234, 0.25);
+        }
+
+        .roadmap-phase-pc {
+            display: inline-block;
+            background: var(--accent-purple);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .roadmap-card-pc h3 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .roadmap-card-pc p {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+        }
+
+        .roadmap-mobile {
+            display: none;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .roadmap-mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--accent-purple), transparent);
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.4);
+            z-index: 1;
+        }
+
+        .roadmap-item-mobile {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .roadmap-card-mobile {
+            width: 80%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: 0 12px 32px var(--shadow);
+            position: relative;
+            z-index: 3;
+        }
+
+        .roadmap-dot-mobile {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 24px;
+            height: 24px;
+            background: #ccc;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(200, 200, 200, 0.4);
+            z-index: 1;
+            animation: softPulse 2.5s infinite;
+        }
+
+        .roadmap-dot-mobile.active {
+            background: var(--accent-green);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
+            animation: greenPulse 1.5s infinite;
+        }
+
+        .mystery-box {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .mystery-card {
+            max-width: 420px;
+            margin: 0 auto;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(10, 10, 16, 0.92), rgba(26, 26, 36, 0.78));
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 28px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
+        }
+
+        .mystery-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="10" cy="10" r="1.2" fill="rgba(147,51,234,0.18)"/><circle cx="50" cy="10" r="1.2" fill="rgba(168,85,247,0.15)"/><circle cx="30" cy="30" r="1.2" fill="rgba(147,51,234,0.12)"/><circle cx="10" cy="50" r="1.2" fill="rgba(168,85,247,0.1)"/><circle cx="50" cy="50" r="1.2" fill="rgba(147,51,234,0.08)"/></svg>') repeat;
+            background-size: 60px 60px;
+            animation: matrixFlow 22s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes matrixFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .mystery-icon {
+            font-size: 56px;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+            color: var(--accent-purple-light);
+            filter: drop-shadow(0 0 10px rgba(147, 51, 234, 0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .mystery-unlock {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-dark));
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.3);
+        }
+
+        .mystery-unlock:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(147, 51, 234, 0.4);
+        }
+
+        .team {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.08) 0%, transparent 70%),
+                repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(147, 51, 234, 0.03) 10px, rgba(147, 51, 234, 0.03) 11px),
+                repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(147, 51, 234, 0.03) 10px, rgba(147, 51, 234, 0.03) 11px);
+            pointer-events: none;
+        }
+
+        .team-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 16px 40px rgba(147, 51, 234, 0.2);
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.4);
+        }
+
+        .team-x-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-x-btn:hover {
+            background: var(--accent-purple);
+            color: white;
+            border-color: var(--accent-purple);
+        }
+
+        footer {
+            padding: 60px 0 32px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-grid {
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+            margin-bottom: 40px;
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 16px;
+        }
+
+        .middle-footter {
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+        }
+
+        .footer-logo {
+            font-size: 26px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: var(--transition);
+        }
+
+        .footer-social a:hover {
+            color: var(--accent-purple);
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .footer-column h4 {
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .footer-column ul li a {
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--accent-purple);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px var(--shadow);
+            transform: scale(0.9);
+            transition: transform 0.4s ease;
+        }
+
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+        }
+
+        .popup-icon {
+            margin-bottom: 16px;
+        }
+
+        .popup-content h3 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .popup-content p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .popup-btn {
+            background: var(--accent-purple);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu {
+              display: flex;
+              width: 100%;
+              align-items: center;
+              justify-content: center;
+            }
+            .mobile-menu a {
+              width: 100%;
+            }
+            .theme-toggle {
+              width: fit-content;
+              display: flex;
+              justify-content: center;
+            }
+            #openMenuBtn { display: flex; }
+            .hero-cta-group { gap: 10px; }
+            .hero-cta-group {
+              display: flex;
+              width: 100%;
+              padding-left: 5%;
+              padding-right: 5%;
+            }
+            .cta-button, .cta-secondary { flex: 1; padding: 8px 12px; font-size: 14px; }
+            .countdown { gap: 8px;}
+            .countdown-container {
+              width: fit-content;
+              padding: 8px 12px;
+            }
+            .time-block { min-width: 56px; padding: 8px; }
+            .time-value { font-size: 24px; }
+            .wallet-input-group { flex-direction: column; }
+            .team-grid { grid-template-columns: 1fr; }
+            .footer-grid {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .roadmap-pc { display: none; }
+            .roadmap-mobile { display: block; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-canvas">
+        <div class="crypto-grid"></div>
+        <div class="blockchain-line"></div>
+        <div class="blockchain-line"></div>
+        <div class="blockchain-line"></div>
+        <div class="node" style="top: 25%; left: 15%; animation-delay: 0s;"></div>
+        <div class="node" style="top: 60%; left: 35%; animation-delay: 1s;"></div>
+        <div class="node" style="top: 40%; left: 70%; animation-delay: 2s;"></div>
+        <div class="node" style="top: 80%; left: 80%; animation-delay: 0.5s;"></div>
+        <div class="matrix-rain" id="matrixRain"></div>
+        <div class="energy-orb"></div>
+        <div class="energy-orb"></div>
+    </div>
+
+    <div class="content-wrap">
+        <header>
+            <nav>
+                <div class="logo">MONAD APES</div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#roadmap">Roadmap</a>
+                    <a href="#mystery">Mystery</a>
+                    <a href="#team">Team</a>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <span id="theme-icon">Moon</span>
+                    </button>
+                </div>
+                <button class="mobile-menu-btn" id="openMenuBtn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <button class="mobile-menu-btn" id="closeMenuBtn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </nav>
+        </header>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#features" onclick="toggleMobileMenu()">Features</a>
+            <a href="#roadmap" onclick="toggleMobileMenu()">Roadmap</a>
+            <a href="#mystery" onclick="toggleMobileMenu()">Mystery</a>
+            <a href="#team" onclick="toggleMobileMenu()">Team</a>
+            <button class="theme-toggle" onclick="toggleTheme(); toggleMobileMenu()">Light Mode</button>
+        </div>
+
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">Built on Monad</div>
+                <h1>Monad Apes Empire</h1>
+                <p>Join the elite. Own the future. Earn, govern, and dominate in Web3.</p>
+                <div class="hero-cta-group">
+                    <button class="cta-button" onclick="showMysteryPopup()">Mint Now</button>
+                    <a href="#features" class="cta-secondary">Explore</a>
+                </div>
+
+                <div class="countdown-container">
+                    <div class="countdown-title">Mint Starts In</div>
+                    <div class="countdown" id="mainCountdown">
+                        <div class="time-block"><div class="time-value">00</div><div class="time-label">Days</div></div>
+                        <div class="time-block"><div class="time-value">00</div><div class="time-label">Hours</div></div>
+                        <div class="time-block"><div class="time-value">00</div><div class="time-label">Mins</div></div>
+                        <div class="time-block"><div class="time-value">00</div><div class="time-label">Secs</div></div>
+                    </div>
+                </div>
+
+                <div class="wallet-panel">
+                    <div class="wallet-input-group">
+                        <input type="text" class="wallet-input" placeholder="Enter wallet address (0x...)" id="walletInput" />
+                    </div>
+                    <button class="wallet-check-btn" onclick="checkWhitelist()">Check</button>
+                    <div class="wallet-result" id="walletResult">Enter your wallet to check whitelist status</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title"><span>Ecosystem Features</span></h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-coins"></i></div>
+                        <h3>$MONAD Energy Token</h3>
+                        <p>$MONAD is the utility token that powers the entire ecosystem.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-coins"></i> Staking & Reward Distribution</li>
+                            <li><i class="fas fa-shopping-cart"></i> Payment in the Monad Merch Market</li>
+                            <li><i class="fas fa-arrow-up"></i> NFT Trait Upgrades / Evolution</li>
+                            <li><i class="fas fa-vote-yea"></i> Governance Voting Power</li>
+                            <li><i class="fas fa-star"></i> Future project whitelisting</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-users"></i></div>
+                        <h3>Monad Empire (Governance)</h3>
+                        <p>The holder-only governance system that decides the future of the project.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-lightbulb"></i> Vote on new project developments</li>
+                            <li><i class="fas fa-file-alt"></i> Submit proposals</li>
+                            <li><i class="fas fa-handshake"></i> Participate in funding votes</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <h3>Monad Merch Market</h3>
+                        <p>A high-tech merch marketplace for both digital and IRL products.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-crown"></i> Holders get early/exclusive access</li>
+                            <li><i class="fas fa-dollar-sign"></i> Pay with $MONAD or fiat</li>
+                            <li><i class="fas fa-gem"></i> Limited editions by rarity</li>
+                            <li><i class="fas fa-qrcode"></i> On-chain QR/NFC authenticity</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+                        <h3>Holders' Revenue Sharing</h3>
+                        <p>10% royalties on all secondary trades are distributed automatically:</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-users"></i> 60% to holders (by rarity)</li>
+                            <li><i class="fas fa-piggy-bank"></i> 20% to treasury</li>
+                            <li><i class="fas fa-cogs"></i> 20% to dev & marketing</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-globe"></i></div>
+                        <h3>IRL Connection</h3>
+                        <p>Monad Apes bridges digital and physical worlds:</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-link"></i> On-chain merch tracking</li>
+                            <li><i class="fas fa-ticket-alt"></i> Exclusive events for top holders</li>
+                            <li><i class="fas fa-store"></i> Monad Pop-Up activations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="roadmap">
+            <div class="container">
+                <h2 class="section-title"><span>Roadmap</span></h2>
+                <div class="roadmap-container">
+                    <div class="roadmap-pc">
+                        <div class="roadmap-item-pc">
+                            <div class="roadmap-dot-pc"></div>
+                            <div class="roadmap-card-pc">
+                                <div class="roadmap-phase-pc">Phase 1</div>
+                                <h3>NFT Genesis</h3>
+                                <p>3,333 PFP NFTs, rarity system, mint-to-airdrop model</p>
+                            </div>
+                        </div>
+                        <div class="roadmap-item-pc">
+                            <div class="roadmap-dot-pc active"></div>
+                            <div class="roadmap-card-pc">
+                                <div class="roadmap-phase-pc">Phase 2</div>
+                                <h3>Mystery Box Reveal</h3>
+                                <p>Airdrops, $MONAD release, merch access</p>
+                            </div>
+                        </div>
+                        <div class="roadmap-item-pc">
+                            <div class="roadmap-dot-pc"></div>
+                            <div class="roadmap-card-pc">
+                                <div class="roadmap-phase-pc">Phase 3</div>
+                                <h3>Governance</h3>
+                                <p>Launch of Monad Empire voting system</p>
+                            </div>
+                        </div>
+                        <div class="roadmap-item-pc">
+                            <div class="roadmap-dot-pc"></div>
+                            <div class="roadmap-card-pc">
+                                <div class="roadmap-phase-pc">Phase 4</div>
+                                <h3>Expansion</h3>
+                                <p>Merch store scaling, metaverse assets, real-world activations</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="roadmap-mobile">
+                        <div class="roadmap-item-mobile">
+                            <div class="roadmap-card-mobile">
+                                <div class="roadmap-phase-pc">Phase 1</div>
+                                <p>twitter launch <span>✅</span></p>
+                                <p>Discord launch & collabs <span>✅</span> </p>
+                                <p>website launch</p>
+                                <p>NFT SALES</p>
+                            </div>
+                            <div class="roadmap-dot-mobile"></div>
+                        </div>
+                        <div class="roadmap-item-mobile">
+                            <div class="roadmap-card-mobile">
+                                <div class="roadmap-phase-pc">Phase 2</div>
+                                <h3>Mystery Box Reveal</h3>
+                                <p>Airdrops</p>
+                                <p>$MONAPE launch</p>
+                                <p> Merchandize drop</p>
+                            </div>
+                            <div class="roadmap-dot-mobile active"></div>
+                        </div>
+                        <div class="roadmap-item-mobile">
+                            <div class="roadmap-card-mobile">
+                                <div class="roadmap-phase-pc">Phase 3</div>
+                                <h3>Governance pool activation</h3>
+                                <p>Launch of Monad Empire voting system</p>
+                                <p>Partnership deals</p>
+                            </div>
+                            <div class="roadmap-dot-mobile"></div>
+                        </div>
+                        <div class="roadmap-item-mobile">
+                            <div class="roadmap-card-mobile">
+                                <div class="roadmap-phase-pc">Phase 4</div>
+                                <h3>Expansion</h3>
+                                <p>Merch store scaling</p>
+                                <p>Digital merch market scaling</p>
+                                <p>investment diversification</p>
+                            </div>
+                            <div class="roadmap-dot-mobile"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mystery" class="mystery-box">
+            <div class="container">
+                <h2 class="section-title"><span>Mystery Box</span></h2>
+                <p class="section-subtitle">Mint 10 NFTs to unlock</p>
+                <div class="mystery-card">
+                    <div class="mystery-icon"><i class="fas fa-gift"></i></div>
+                    <h3>Get Mystery Box</h3>
+                    <p>Mint 10 NFTs to unlock exclusive utilities</p>
+                    <div class="mystery-count">meet 6 contents</div>
+                    <button class="mystery-unlock" onclick="showMysteryPopup()">Get Mystery Box</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" class="team">
+            <div class="container">
+                <h2 class="section-title"><span>Monad Ape team</span></h2>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="team-avatar">
+                            <img src="" alt="">
+                        </div>
+                        <h3>Silver back ape</h3>
+                        <div class="team-role">Founder</div>
+                        <p class="team-quote">"just like satoshi in 2008, again The next revolution begins in silence."</p>
+                        <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> Follow</a>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar">
+                            <img src="" alt="">
+                        </div>
+                        <h3>Alex Chen</h3>
+                        <div class="team-role">Lead Artist</div>
+                        <p class="team-quote">Crafting the visual empire of Monad Apes.</p>
+                        <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> @alexart</a>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar">
+                            <img src="" alt="">
+                        </div>
+                        <h3>Priya Patel</h3>
+                        <div class="team-role">Project Manager</div>
+                        <p class="team-quote">Orchestrating the launch to perfection.</p>
+                        <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> @priyapm</a>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar">
+                            <img src="" alt="">
+                        </div>
+                        <h3>Marcus Lee</h3>
+                        <div class="team-role">Social Media</div>
+                        <p class="team-quote">Building the loudest ape army online.</p>
+                        <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> @marcusape</a>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar">
+                            <img src="" alt="">
+                        </div>
+                        <h3>TimmyONmonad</h3>
+                        <div class="team-role">Social Media</div>
+                        <p class="team-quote">Building the loudest ape army online.</p>
+                        <a href="#" class="team-x-btn"><i class="fab fa-x-twitter"></i> @marcusape</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">MONAD APES</div>
+                    <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">Own. Earn. Rule.</p>
+                    <div class="footer-social">
+                        <a href="#" title="X"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                        <a href="#" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="middle-footter">
+                  <div class="footer-column">
+                    <h4>Project</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#roadmap">Roadmap</a></li>
+                        <li><a href="#mystery">Mystery</a></li>
+                        <li><a href="#team">Team</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#">X</a></li>
+                        <li><a href="#">Discord</a></li>
+                        <li><a href="#">TikTok</a></li>
+                        <li><a href="#">Facebook</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Whitepaper</a></li>
+                        <li><a href="#">Docs</a></li>
+                        <li><a href="#">Brand Kit</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2025 Monad Apes. All rights reserved.
+            </div>
+        </footer>
+    </div>
+
+    <div class="popup-overlay" id="whitelistPopup">
+        <div class="popup-content">
+            <div class="popup-icon" id="popupIcon"></div>
+            <h3 id="popupTitle">Congratulations!</h3>
+            <p id="popupMessage">You are whitelisted! Get ready to mint on Dec 26.</p>
+            <button class="popup-btn" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="mysteryPopup">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <div class="countdown-container" style="margin: 0 auto 20px; max-width: 400px; padding: 12px;">
+                    <div class="countdown-title" style="font-size: 13px;">Mint Starts In</div>
+                    <div class="countdown" id="popupCountdown">
+                        <div class="time-block"><div class="time-value">00</div><div class="time-label">Days</div></div>
+                        <div class="time-block"><div class="time-value">00</div><div class="time-label">Hours</div></div>
+                        <div class="time-block"><div class="time-value">00</div><div class="time-label">Mins</div></div>
+                        <div class="time-block"><div class="time-value">00</div><div class="time-label">Secs</div></div>
+                    </div>
+                </div>
+            </div>
+            <h3>Coming Soon</h3>
+            <p>Mint 10 NFTs to unlock your Mystery Box on launch day!</p>
+            <button class="popup-btn" onclick="closePopup()">Got It</button>
+        </div>
+    </div>
+
+    <script>
+        const matrixRain = document.getElementById('matrixRain');
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const fontSize = 14;
+        let columns, drops = [];
+
+        function initMatrix() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.style.position = 'absolute';
+            canvas.style.top = 0;
+            canvas.style.left = 0;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            matrixRain.innerHTML = '';
+            matrixRain.appendChild(canvas);
+
+            columns = Math.floor(canvas.width / fontSize);
+            drops = Array(columns).fill(1);
+
+            function draw() {
+                ctx.fillStyle = 'rgba(10, 10, 16, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(147, 51, 234, 0.6)';
+                ctx.font = `${fontSize}px monospace`;
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            }
+
+            setInterval(draw, 50);
+        }
+
+        initMatrix();
+        window.addEventListener('resize', () => {
+            matrixRain.innerHTML = '';
+            initMatrix();
+        });
+
+        const WHITELIST = ["0x1234567890abcdef1234567890abcdef12345678", "0xabcdef1234567890abcdef1234567890abcdef12"];
+        const MINT_DATE = new Date('2025-12-26T12:00:00Z');
+
+        function toggleTheme() {
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            const newTheme = isLight ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            document.getElementById('theme-icon').textContent = newTheme === 'light' ? 'Sun' : 'Moon';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function updateCountdown(elementId) {
+            const update = () => {
+                const diff = MINT_DATE - new Date();
+                if (diff <= 0) {
+                    document.getElementById(elementId).innerHTML = '<div style="grid-column: span 4; color: var(--accent-purple); font-weight: 700;">Mint is LIVE!</div>';
+                    return;
+                }
+                const d = Math.floor(diff / 86400000).toString().padStart(2, '0');
+                const h = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
+                const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+                const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+                const values = document.querySelectorAll(`#${elementId} .time-value`);
+                if (values.length === 4) {
+                    values[0].textContent = d;
+                    values[1].textContent = h;
+                    values[2].textContent = m;
+                    values[3].textContent = s;
+                }
+            };
+            update();
+            return setInterval(update, 1000);
+        }
+
+        let mainInterval, popupInterval;
+
+        window.onload = () => {
+            const saved = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('theme-icon').textContent = saved === 'light' ? 'Sun' : 'Moon';
+            mainInterval = updateCountdown('mainCountdown');
+            
+            const openBtn = document.getElementById('openMenuBtn');
+            const closeBtn = document.getElementById('closeMenuBtn');
+            if (openBtn) openBtn.style.display = 'flex';
+            if (closeBtn) closeBtn.style.display = 'none';
+        };
+
+        function showMysteryPopup() {
+            const popup = document.getElementById('mysteryPopup');
+            popup.classList.add('active');
+            if (popupInterval) clearInterval(popupInterval);
+            popupInterval = updateCountdown('popupCountdown');
+        }
+
+        function closePopup() {
+            document.querySelectorAll('.popup-overlay').forEach(p => p.classList.remove('active'));
+            if (popupInterval) clearInterval(popupInterval);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const openBtn = document.getElementById('openMenuBtn');
+            const closeBtn = document.getElementById('closeMenuBtn');
+            
+            menu.classList.toggle('active');
+            
+            if (menu.classList.contains('active')) {
+                openBtn.style.display = 'none';
+                closeBtn.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } else {
+                openBtn.style.display = 'flex';
+                closeBtn.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function checkWhitelist() {
+            const input = document.getElementById('walletInput').value.trim().toLowerCase();
+            const result = document.getElementById('walletResult');
+
+            if (!input || !input.startsWith('0x') || input.length !== 42) {
+                result.textContent = 'Invalid wallet address';
+                result.style.color = '#ef4444';
+                return;
+            }
+
+            const isWhitelisted = WHITELIST.map(w => w.toLowerCase()).includes(input);
+
+            const popup = document.getElementById('whitelistPopup');
+            const icon = document.getElementById('popupIcon');
+            const title = document.getElementById('popupTitle');
+            const msg = document.getElementById('popupMessage');
+
+            if (isWhitelisted) {
+                icon.innerHTML = '<i class="fas fa-check-circle" style="color:#10b981; font-size: 48px;"></i>';
+                title.textContent = 'Congratulations!';
+                msg.innerHTML = 'You are <strong>whitelisted</strong>!<br>Get ready to mint on Dec 26.';
+            } else {
+                icon.innerHTML = '<i class="fas fa-times-circle" style="color:#ef4444; font-size: 48px;"></i>';
+                title.textContent = 'Not Whitelisted';
+                msg.innerHTML = 'Join our <a href="#" style="color:var(--accent-purple);text-decoration:underline">Discord</a> to apply.';
+            }
+            popup.classList.add('active');
+        }
+
+        document.querySelectorAll('.popup-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closePopup();
+            });
+        });
+    </script>
+</body>
+</html>
